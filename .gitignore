@@ -129,3 +129,4 @@ dmypy.json
 .pyre/
 1_data_manipulations/database.sqlite
 *.sqlite
+*.csv
