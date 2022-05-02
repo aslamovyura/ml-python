@@ -1,16 +1,57 @@
+import click
 from pathlib import Path
 from joblib import dump
-
-import click
 from sklearn.metrics import accuracy_score
 
-# from .data import get_dataset
-# from .pipeline import create_pipeline
-import data as d
+import data as dt
 import pipeline as p
 
 
-
+@click.command()
+@click.option(
+    "-d",
+    "--dataset-path",
+    default="../../data/train.csv",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    show_default=True,
+)
+@click.option(
+    "-s",
+    "--save-model-path",
+    default="../../data/model.joblib",
+    type=click.Path(dir_okay=False, writable=True, path_type=Path),
+    show_default=True,
+)
+@click.option(
+    "--random-state",
+    default=42,
+    type=int,
+    show_default=True,
+)
+@click.option(
+    "--test-split-ratio",
+    default=0.2,
+    type=click.FloatRange(0, 1, min_open=True, max_open=True),
+    show_default=True,
+)
+@click.option(
+    "--use-scaler",
+    default=True,
+    type=bool,
+    show_default=True,
+)
+@click.option(
+    "--max-iter",
+    default=100,
+    type=int,
+    show_default=True,
+)
+@click.option(
+    "--logreg-c",
+    default=1.0,
+    type=float,
+    show_default=True,
+)
 def train_cl(
     dataset_path: Path,
     save_model_path: Path,
@@ -19,9 +60,8 @@ def train_cl(
     use_scaler: bool,
     max_iter: int,
     logreg_c: float,
-# ) -> None:
-) -> float:
-    features_train, features_val, target_train, target_val = d.get_dataset(
+) -> None:
+    features_train, features_val, target_train, target_val = dt.get_dataset(
         dataset_path,
         random_state,
         test_split_ratio,
@@ -32,4 +72,7 @@ def train_cl(
     click.echo(f"Accuracy: {accuracy}.")
     dump(pipeline, save_model_path)
     click.echo(f"Model is saved to {save_model_path}.")
-    return accuracy
+
+
+if __name__ == '__main__':
+    train_cl()
