@@ -1,6 +1,10 @@
 # 9 HW ignore list.
 9_evaluation_selection/src/forest_ml/mlruns
 9_evaluation_selection/src/forest_ml/data
+9_evaluation_selection/src/forest_ml/.idea
+9_evaluation_selection/data
+9_evaluation_selection/mlruns
+9_evaluation_selection/.idea
 
 
 # Byte-compiled / optimized / DLL files
@@ -135,3 +139,5 @@ dmypy.json
 1_data_manipulations/database.sqlite
 *.sqlite
 *.csv
+9_evaluation_selection/.idea/workspace.xml
+9_evaluation_selection/mlruns/0/meta.yaml

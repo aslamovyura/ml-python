@@ -8,14 +8,18 @@ from sklearn.ensemble import RandomForestClassifier
 
 
 def create_logistic_pipeline(
-    use_scaler: bool, use_pca: bool, max_iter: int, logreg_C: float, random_state: int
+    use_scaler: bool = True,
+    use_dim_reducer: bool = True,
+    max_iter: int = 100,
+    logreg_C: float = 1.0,
+    random_state: int = 42
 ) -> Pipeline:
     pipeline_steps = []
     if use_scaler:
         pipeline_steps.append(("scaler", StandardScaler()))
 
-    if use_pca:
-        pipeline_steps.append(("pca", PCA(5)))
+    if use_dim_reducer:
+        pipeline_steps.append(("reduce_dim", TruncatedSVD(n_components=10)))
 
     pipeline_steps.append(
         (
@@ -28,21 +32,21 @@ def create_logistic_pipeline(
     return Pipeline(steps=pipeline_steps)
 
 
-def create_RFC_pipeline(
-        use_scaler: bool,
-        use_pca: bool,
-        n_estimators: int,
-        max_depth: int,
-        criterion: str,
-        random_state: int
+def create_rfc_pipeline(
+        use_scaler: bool = True,
+        use_dim_reducer: bool = True,
+        n_estimators: int = 100,
+        max_depth: int = 10,
+        criterion: str = 'gini',
+        random_state: int = None
 
 ) -> Pipeline:
     pipeline_steps = []
     if use_scaler:
         pipeline_steps.append(("scaler", StandardScaler()))
 
-    if use_pca:
-        pipeline_steps.append(("pca", PCA(5)))
+    if use_dim_reducer:
+        pipeline_steps.append(("reduce_dim", TruncatedSVD(n_components=10)))
 
     pipeline_steps.append(
         (
