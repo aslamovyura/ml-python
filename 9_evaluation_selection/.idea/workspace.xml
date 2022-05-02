@@ -2,10 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bc795f45-f453-4bdd-b148-d7b71cd75bb5" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/forest_ml/train_logistic.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/forest_ml/train_rfc.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/forest_ml/data.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/forest_ml/data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/poetry.lock" beforeDir="false" afterPath="$PROJECT_DIR$/poetry.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/forest_ml/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/forest_ml/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/forest_ml/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/forest_ml/train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/forest_ml/pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/forest_ml/pipeline.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/forest_ml/train.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,6 +25,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -38,8 +50,12 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/forest_ml" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/forest_ml" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/dataset" />
@@ -101,24 +117,29 @@
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/forest_ml/train.py</url>
-          <line>90</line>
+          <url>file://$PROJECT_DIR$/src/forest_ml/train_logistic.py</url>
+          <line>105</line>
           <option name="timeStamp" value="9" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/forest_ml/train.py</url>
-          <line>13</line>
+          <url>file://$PROJECT_DIR$/src/forest_ml/train_logistic.py</url>
+          <line>16</line>
           <option name="timeStamp" value="12" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/forest_ml/train.py</url>
-          <line>71</line>
-          <option name="timeStamp" value="15" />
+          <url>file://$PROJECT_DIR$/src/forest_ml/train_logistic.py</url>
+          <line>83</line>
+          <option name="timeStamp" value="17" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/forest_ml/train.py</url>
-          <line>76</line>
-          <option name="timeStamp" value="17" />
+          <url>file://$PROJECT_DIR$/src/forest_ml/pipeline.py</url>
+          <line>17</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/forest_ml/pipeline.py</url>
+          <line>16</line>
+          <option name="timeStamp" value="20" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

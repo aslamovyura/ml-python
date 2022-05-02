@@ -1,6 +1,7 @@
 from pathlib import Path
 
-import train as tr
+import train_logistic
+import train_rfc
 
 # dataset_path = Path('/Users/yuraaslamov/Documents/GitHub/ml-python/9_evaluation_selection/data/train.csv')
 # model_path = Path('/Users/yuraaslamov/Documents/GitHub/ml-python/9_evaluation_selection/results/model')
@@ -18,4 +19,5 @@ model_path = Path('../../data/model.joblib')
 #     logreg_c=1,
 # )
 
-tr.train_cl()
+# train_logistic.train()
+train_RFC.train()
