@@ -1,8 +1,9 @@
 import click
 from pathlib import Path
 from joblib import dump
-from sklearn.metrics import accuracy_score
+from sklearn.model_selection import cross_validate
 
+import numpy as np
 import data as dt
 import pipeline as p
 
@@ -29,9 +30,9 @@ import pipeline as p
     show_default=True,
 )
 @click.option(
-    "--test-split-ratio",
-    default=0.2,
-    type=click.FloatRange(0, 1, min_open=True, max_open=True),
+    "--cv",
+    default=5,
+    type=int,
     show_default=True,
 )
 @click.option(
@@ -42,8 +43,14 @@ import pipeline as p
 )
 @click.option(
     "--max-iter",
-    default=100,
+    default=1000,
     type=int,
+    show_default=True,
+)
+@click.option(
+    "--logreg-c",
+    default=1.0,
+    type=float,
     show_default=True,
 )
 @click.option(
@@ -56,20 +63,31 @@ def train_cl(
     dataset_path: Path,
     save_model_path: Path,
     random_state: int,
-    test_split_ratio: float,
+    cv: int,
     use_scaler: bool,
     max_iter: int,
     logreg_c: float,
 ) -> None:
-    features_train, features_val, target_train, target_val = dt.get_dataset(
-        dataset_path,
-        random_state,
-        test_split_ratio,
-    )
+    features, target = dt.get_dataset(dataset_path)
     pipeline = p.create_pipeline(use_scaler, max_iter, logreg_c, random_state)
-    pipeline.fit(features_train, target_train)
-    accuracy = accuracy_score(target_val, pipeline.predict(features_val))
-    click.echo(f"Accuracy: {accuracy}.")
+
+    scoring = ['f1_macro', 'precision_macro', 'recall_macro', 'r2']
+    scores = cross_validate(pipeline, features, target, scoring=scoring, cv=cv, return_train_score=True)
+
+    precision = np.mean(scores['test_precision_macro'])
+    recall = np.mean(scores['test_recall_macro'])
+    f1 = np.mean(scores['test_f1_macro'])
+    test_r2 = np.mean(scores['test_r2'])
+    train_r2 = np.mean(scores['train_r2'])
+
+    click.echo("---")
+    click.echo(f"Precision: {precision}.")
+    click.echo(f"Recall: {recall}.")
+    click.echo(f"F1-score: {f1}.")
+    click.echo(f"R2 error (train): {train_r2}.")
+    click.echo(f"R2 error (test): {test_r2}.")
+    click.echo("---")
+
     dump(pipeline, save_model_path)
     click.echo(f"Model is saved to {save_model_path}.")
 
