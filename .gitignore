@@ -5,6 +5,7 @@
 9_evaluation_selection/data
 9_evaluation_selection/mlruns
 9_evaluation_selection/.idea
+9_evaluation_selection/profiling_report.html
 
 
 # Byte-compiled / optimized / DLL files

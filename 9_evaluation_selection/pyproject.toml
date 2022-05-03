@@ -9,6 +9,8 @@ train_rfc = "src.forest_ml.train_rfc:train"
 train_rfc_opt = "src.forest_ml.train_rfc:train_with_opt_hyperparameters"
 train_logistic = "src.forest_ml.train_logistic:train"
 train_logistic_opt = "src.forest_ml.train_logistic:train_with_opt_hyperparameters"
+dataset_profiling = "src.forest_ml.utils.EDA:dataset_profiling"
+dataset_gui = "src.forest_ml.utils.EDA:visualize_dataset"
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -17,6 +19,8 @@ pandas = "^1.4.2"
 sklearn = "^0.0"
 click = "^8.1.3"
 mlflow = "^1.25.1"
+pandas-profiling = "^3.2.0"
+pandasgui = "^0.2.13"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
