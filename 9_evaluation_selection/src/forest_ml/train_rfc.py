@@ -85,6 +85,13 @@ def train(
 ) -> None:
     features, target = get_dataset(dataset_path)
 
+    # if not dataset_path: raise Exception("Invalid 'dataset_path' parameter!")
+    # if not save_model_path : raise Exception("Invalid 'save_model_path' parameter!")
+    # if cv < 1: raise Exception("Invalid 'cv' parameter!")
+    # if n_estimators < 1: raise Exception("Invalid 'n_estimators' parameter!")
+    # if max_depth < 1: raise Exception("Invalid 'max_depth' parameter!")
+    # if not criterion : raise Exception("Invalid 'criterion' parameter!")
+
     experiment_id = create_mlflow_experiment_by_name(EXPERIMENT_NAME)
     with mlflow.start_run(experiment_id=experiment_id):
         pipeline = create_rfc_pipeline(use_scaler, use_dim_reducer, n_estimators, max_depth, criterion, random_state)
