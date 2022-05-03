@@ -11,7 +11,9 @@ import mlflow.sklearn
 import numpy as np
 from .data import get_dataset
 from .pipeline import create_logistic_pipeline
+from .utils.mlflow_utils import create_mlflow_experiment_by_name
 
+EXPERIMENT_NAME = 'LogisticRegression'
 
 @click.command()
 @click.option(
@@ -76,7 +78,8 @@ def train(
 ) -> None:
     features, target = get_dataset(dataset_path)
 
-    with mlflow.start_run(experiment_id=1):
+    experiment_id = create_mlflow_experiment_by_name(EXPERIMENT_NAME)
+    with mlflow.start_run(experiment_id=experiment_id):
         pipeline = create_logistic_pipeline(use_scaler, use_dim_reducer, max_iter, logreg_c, random_state)
 
         scoring = ['accuracy', 'f1_macro', 'precision_macro', 'recall_macro', 'r2']
@@ -98,10 +101,10 @@ def train(
         click.echo(f"R2 error (test): {test_r2}.")
         click.echo("---")
 
-        mlflow.log_param("use_scaler", use_scaler)
-        mlflow.log_param("use_dim_reducer", use_dim_reducer)
+        mlflow.log_param("scaler", 'StandardScaler()' if use_scaler else 'passthrough')
+        mlflow.log_param("dim_reducer", 'TruncatedSVD(10)' if use_dim_reducer else 'passthrough')
         mlflow.log_param("max_iter", max_iter)
-        mlflow.log_param("logreg_c", logreg_c)
+        mlflow.log_param("logreg_C", logreg_c)
         mlflow.log_metric("accuracy", accuracy)
 
         dump(pipeline, save_model_path)
@@ -137,15 +140,16 @@ def train_with_opt_hyperparameters(
         "classifier__C": [0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000]
     }
 
+    experiment_id = create_mlflow_experiment_by_name(EXPERIMENT_NAME)
     pipe = create_logistic_pipeline()
     accuracy_nested = []
     model_nested = []
     # N_TRIALS = 20
-    # N_TRIALS = 10
+    N_TRIALS = 10
     # N_TRIALS = 5
-    N_TRIALS = 2
+    # N_TRIALS = 2
     for i in range(N_TRIALS):
-        with mlflow.start_run(experiment_id=1):
+        with mlflow.start_run(experiment_id=experiment_id):
             # For each trial, we use cross-validation splits on independently
             # randomly shuffled data by passing distinct values to the random_state
             # parameter.

@@ -11,7 +11,9 @@ import mlflow.sklearn
 import numpy as np
 from .data import get_dataset
 from .pipeline import create_rfc_pipeline
+from .utils.mlflow_utils import create_mlflow_experiment_by_name
 
+EXPERIMENT_NAME = 'RandomForestClassifier'
 
 @click.command()
 @click.option(
@@ -83,7 +85,8 @@ def train(
 ) -> None:
     features, target = get_dataset(dataset_path)
 
-    with mlflow.start_run(experiment_id=2):
+    experiment_id = create_mlflow_experiment_by_name(EXPERIMENT_NAME)
+    with mlflow.start_run(experiment_id=experiment_id):
         pipeline = create_rfc_pipeline(use_scaler, use_dim_reducer, n_estimators, max_depth, criterion, random_state)
 
         scoring = ['accuracy', 'f1_macro', 'precision_macro', 'recall_macro']
@@ -101,8 +104,8 @@ def train(
         click.echo(f"F1-score: {f1}.")
         click.echo("---")
 
-        mlflow.log_param("use_scaler", use_scaler)
-        mlflow.log_param("use_dim_reducer", use_dim_reducer)
+        mlflow.log_param("scaler", 'StandardScaler()' if use_scaler else 'passthrough')
+        mlflow.log_param("dim_reducer", 'TruncatedSVD(10)' if use_dim_reducer else 'passthrough')
         mlflow.log_param("n_estimators", n_estimators)
         mlflow.log_param("max_depth", max_depth)
         mlflow.log_param("criterion", criterion)
@@ -143,15 +146,16 @@ def train_with_opt_hyperparameters(
         "classifier__criterion": ['entropy', 'gini']
     }
 
-    # pipe = p.create_rfc_pipeline()
+    experiment_id = create_mlflow_experiment_by_name(EXPERIMENT_NAME)
     pipe = create_rfc_pipeline()
     accuracy_nested = []
     model_nested = []
     # N_TRIALS = 20
-    # N_TRIALS = 10
-    N_TRIALS = 2
+    N_TRIALS = 10
+    # N_TRIALS = 2
     for i in range(N_TRIALS):
-        with mlflow.start_run(experiment_id=2):
+        # with mlflow.start_run(experiment_id=2):
+        with mlflow.start_run(experiment_id=experiment_id):
             # For each trial, we use cross-validation splits on independently
             # randomly shuffled data by passing distinct values to the random_state
             # parameter.
