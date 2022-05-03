@@ -13,7 +13,16 @@ This package allows you to train model for forest categories classification.
 ```sh
 poetry install --no-dev
 ```
-5. Run training process with the following commands:
+5. To generate dataset profiling report (EDA), use the following command:
+```sh
+poetry run dataset_profiling -d <path to csv with data>
+```
+or if you just want to visualize dataset:
+```sh
+poetry run dataset_gui -d <path to csv with data>
+```
+
+6. Run training process with the following commands:
 - Logistic Regression:
 ```sh
 poetry run train_logistic -d <path to csv with data> -s <path to save trained model>
@@ -26,7 +35,7 @@ You can configure additional options (such as hyperparameters) in the CLI. To ge
 ```sh
 poetry run train_logistic --help
 ```
-6. Run training process with optimal hyperparameters search with the following commands:
+7. Run training process with optimal hyperparameters search with the following commands:
 - Logistic Regression:
 ```sh
 poetry run train_logistic_opt -d <path to csv with data> -s <path to save trained model>
@@ -35,7 +44,7 @@ poetry run train_logistic_opt -d <path to csv with data> -s <path to save traine
 ```sh
 poetry run train_rfc_opt -d <path to csv with data> -s <path to save trained model>
 ```
-6. Run MLflow UI to see the information about experiments you conducted:
+8. Run MLflow UI to see the information about experiments you conducted:
 ```sh
 poetry run mlflow ui
 ```
