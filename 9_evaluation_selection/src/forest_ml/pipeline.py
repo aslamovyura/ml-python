@@ -10,7 +10,7 @@ from sklearn.ensemble import RandomForestClassifier
 def create_logistic_pipeline(
     use_scaler: bool = True,
     use_dim_reducer: bool = True,
-    max_iter: int = 100,
+    max_iter: int = 1000,
     logreg_C: float = 1.0,
     random_state: int = 42
 ) -> Pipeline:

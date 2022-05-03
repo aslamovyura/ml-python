@@ -9,22 +9,22 @@ import mlflow
 import mlflow.sklearn
 
 import numpy as np
-import data as dt
-import pipeline as p
+from .data import get_dataset
+from .pipeline import create_rfc_pipeline
 
 
 @click.command()
 @click.option(
     "-d",
     "--dataset-path",
-    default="../../data/train.csv",
+    default="./data/train.csv",
     type=click.Path(exists=True, dir_okay=False, path_type=Path),
     show_default=True,
 )
 @click.option(
     "-s",
     "--save-model-path",
-    default="../../data/model_rfc.joblib",
+    default="./data/model_rfc.joblib",
     type=click.Path(dir_okay=False, writable=True, path_type=Path),
     show_default=True,
 )
@@ -47,7 +47,7 @@ import pipeline as p
     show_default=True,
 )
 @click.option(
-    "--use-pca",
+    "--use-dim-reducer",
     default=False,
     type=bool,
     show_default=True,
@@ -76,15 +76,15 @@ def train(
     random_state: int,
     cv: int,
     use_scaler: bool,
-    use_pca: bool,
+    use_dim_reducer: bool,
     n_estimators: int,
     max_depth: int,
     criterion: str
 ) -> None:
-    features, target = dt.get_dataset(dataset_path)
+    features, target = get_dataset(dataset_path)
 
     with mlflow.start_run(experiment_id=2):
-        pipeline = p.create_rfc_pipeline(use_scaler, use_pca, n_estimators, max_depth, criterion, random_state)
+        pipeline = create_rfc_pipeline(use_scaler, use_dim_reducer, n_estimators, max_depth, criterion, random_state)
 
         scoring = ['accuracy', 'f1_macro', 'precision_macro', 'recall_macro']
         scores = cross_validate(pipeline, features, target, scoring=scoring, cv=cv, return_train_score=True)
@@ -102,7 +102,7 @@ def train(
         click.echo("---")
 
         mlflow.log_param("use_scaler", use_scaler)
-        mlflow.log_param("use_pca", use_pca)
+        mlflow.log_param("use_dim_reducer", use_dim_reducer)
         mlflow.log_param("n_estimators", n_estimators)
         mlflow.log_param("max_depth", max_depth)
         mlflow.log_param("criterion", criterion)
@@ -117,14 +117,14 @@ def train(
 @click.option(
     "-d",
     "--dataset-path",
-    default="../../data/train.csv",
+    default="./data/train.csv",
     type=click.Path(exists=True, dir_okay=False, path_type=Path),
     show_default=True,
 )
 @click.option(
     "-s",
     "--save-model-path",
-    default="../../data/model_rfc.joblib",
+    default="./data/model_rfc.joblib",
     type=click.Path(dir_okay=False, writable=True, path_type=Path),
     show_default=True,
 )
@@ -133,8 +133,7 @@ def train_with_opt_hyperparameters(
         save_model_path: Path
 ) -> None:
 
-    features, target = dt.get_dataset(dataset_path)
-
+    features, target = get_dataset(dataset_path)
 
     param_space = {
         "scaler": ["passthrough", StandardScaler()],
@@ -144,12 +143,13 @@ def train_with_opt_hyperparameters(
         "classifier__criterion": ['entropy', 'gini']
     }
 
-    pipe = p.create_rfc_pipeline()
+    # pipe = p.create_rfc_pipeline()
+    pipe = create_rfc_pipeline()
     accuracy_nested = []
     model_nested = []
     # N_TRIALS = 20
     # N_TRIALS = 10
-    N_TRIALS = 10
+    N_TRIALS = 2
     for i in range(N_TRIALS):
         with mlflow.start_run(experiment_id=2):
             # For each trial, we use cross-validation splits on independently
@@ -162,7 +162,7 @@ def train_with_opt_hyperparameters(
             model = RandomizedSearchCV(pipe,
                                        param_distributions=param_space,
                                        # n_iter=20,
-                                       # n_iter=2,
+                                       # n_iter=10,
                                        n_iter=2,
                                        scoring='accuracy',
                                        cv=inner_cv,
@@ -174,7 +174,8 @@ def train_with_opt_hyperparameters(
             print(params)
 
             scoring = ['accuracy', 'f1_macro', 'precision_macro', 'recall_macro']
-            pipeline = p.create_rfc_pipeline()
+            # pipeline = p.create_rfc_pipeline()
+            # pipeline = create_rfc_pipeline()
 
             scores = cross_validate(model, features, target, scoring=scoring, cv=outer_cv, return_train_score=True)
 

@@ -4,6 +4,12 @@ version = "0.1.0"
 description = ""
 authors = ["Aslamov Yury <aslamov.yura@gmail.com>"]
 
+[tool.poetry.scripts]
+train_rfc = "src.forest_ml.train_rfc:train"
+train_rfc_opt = "src.forest_ml.train_rfc:train_with_opt_hyperparameters"
+train_logistic = "src.forest_ml.train_logistic:train"
+train_logistic_opt = "src.forest_ml.train_logistic:train_with_opt_hyperparameters"
+
 [tool.poetry.dependencies]
 python = "^3.8"
 pendulum = "^2.1.2"

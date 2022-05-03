@@ -9,22 +9,22 @@ import mlflow
 import mlflow.sklearn
 
 import numpy as np
-import data as dt
-import pipeline as p
+from .data import get_dataset
+from .pipeline import create_logistic_pipeline
 
 
 @click.command()
 @click.option(
     "-d",
     "--dataset-path",
-    default="../../data/train.csv",
+    default="./data/train.csv",
     type=click.Path(exists=True, dir_okay=False, path_type=Path),
     show_default=True,
 )
 @click.option(
     "-s",
     "--save-model-path",
-    default="../../data/model_logreg.joblib",
+    default="./data/model_logreg.joblib",
     type=click.Path(dir_okay=False, writable=True, path_type=Path),
     show_default=True,
 )
@@ -47,7 +47,7 @@ import pipeline as p
     show_default=True,
 )
 @click.option(
-    "--use-pca",
+    "--use-dim-reducer",
     default=False,
     type=bool,
     show_default=True,
@@ -74,10 +74,10 @@ def train(
     max_iter: int,
     logreg_c: float
 ) -> None:
-    features, target = dt.get_dataset(dataset_path)
+    features, target = get_dataset(dataset_path)
 
     with mlflow.start_run(experiment_id=1):
-        pipeline = p.create_logistic_pipeline(use_scaler, use_dim_reducer, max_iter, logreg_c, random_state)
+        pipeline = create_logistic_pipeline(use_scaler, use_dim_reducer, max_iter, logreg_c, random_state)
 
         scoring = ['accuracy', 'f1_macro', 'precision_macro', 'recall_macro', 'r2']
         scores = cross_validate(pipeline, features, target, scoring=scoring, cv=cv, return_train_score=True)
@@ -112,14 +112,14 @@ def train(
 @click.option(
     "-d",
     "--dataset-path",
-    default="../../data/train.csv",
+    default="./data/train.csv",
     type=click.Path(exists=True, dir_okay=False, path_type=Path),
     show_default=True,
 )
 @click.option(
     "-s",
     "--save-model-path",
-    default="../../data/model_logreg.joblib",
+    default="./data/model_logreg.joblib",
     type=click.Path(dir_okay=False, writable=True, path_type=Path),
     show_default=True,
 )
@@ -128,7 +128,7 @@ def train_with_opt_hyperparameters(
         save_model_path: Path
 ) -> None:
 
-    features, target = dt.get_dataset(dataset_path)
+    features, target = get_dataset(dataset_path)
 
     param_space = {
         "scaler": ["passthrough", StandardScaler()],
@@ -137,13 +137,13 @@ def train_with_opt_hyperparameters(
         "classifier__C": [0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000]
     }
 
-    pipe = p.create_logistic_pipeline()
+    pipe = create_logistic_pipeline()
     accuracy_nested = []
     model_nested = []
     # N_TRIALS = 20
     # N_TRIALS = 10
     # N_TRIALS = 5
-    N_TRIALS = 10
+    N_TRIALS = 2
     for i in range(N_TRIALS):
         with mlflow.start_run(experiment_id=1):
             # For each trial, we use cross-validation splits on independently
@@ -156,8 +156,8 @@ def train_with_opt_hyperparameters(
             model = RandomizedSearchCV(pipe,
                                        param_distributions=param_space,
                                        # n_iter=20,
-                                       n_iter=2,
                                        # n_iter=10,
+                                       n_iter=2,
                                        scoring='accuracy',
                                        cv=inner_cv,
                                        n_jobs=-1)
@@ -168,12 +168,9 @@ def train_with_opt_hyperparameters(
             print(params)
 
             scoring = ['accuracy', 'f1_macro', 'precision_macro', 'recall_macro', 'r2']
-            pipeline = p.create_logistic_pipeline()
-
             scores = cross_validate(model, features, target, scoring=scoring, cv=outer_cv, return_train_score=True)
 
             accuracy = np.mean(scores['test_accuracy'])
-            # print(accuracy)
             precision = np.mean(scores['test_precision_macro'])
             recall = np.mean(scores['test_recall_macro'])
             f1 = np.mean(scores['test_f1_macro'])
