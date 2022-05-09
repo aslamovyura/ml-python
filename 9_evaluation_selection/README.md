@@ -57,29 +57,29 @@ Experiment results for Logistic Regression and Random Forest Classifier are stor
 The code in this repository is tested, formatted with black, and pass mypy typechecking before being commited to the repository.
 
 Install all requirements (including dev requirements) to poetry environment:
-```
+```sh
 poetry install
 ```
 Now you can use developer instruments, e.g. pytest:
-```
+```sh
 poetry run pytest
 ```
 ![rfc_exp](assets/tests_run.png)
 
 Format your code with black by using poetry:
-```
+```sh
 poetry run black src tests
 ```
 ![rfc_exp](assets/black_formatting.png)
 
 Lint your code with flake8 by using poetry:
-```
+```sh
 poetry run flake8 src
 ```
 ![rfc_exp](assets/code_linting.png)
 
 Check your code annotation with mypy by using poetry:
-```
+```sh
 poetry run mypy .
 ```
 ![rfc_exp](assets/mypy_run.png)
