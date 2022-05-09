@@ -24,5 +24,5 @@ def test_error_for_invalid_save_model_path(runner: CliRunner) -> None:
 
 def test_error_for_invalid_cv(runner: CliRunner) -> None:
     """It fails when test `cv` is lower than 1."""
-    result = runner.invoke(train, ["--cv", -5])
+    result = runner.invoke(train, ["--cv", "-5"])
     assert result.exit_code == 1

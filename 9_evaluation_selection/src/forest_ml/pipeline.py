@@ -36,7 +36,7 @@ def create_rfc_pipeline(
     n_estimators: int = 100,
     max_depth: int = 10,
     criterion: str = "gini",
-    random_state: int = None,
+    random_state: int = 42,
 ) -> Pipeline:
     pipeline_steps = []
     if use_scaler:

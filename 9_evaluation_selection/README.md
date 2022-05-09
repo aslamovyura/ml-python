@@ -77,3 +77,9 @@ Lint your code with flake8 by using poetry:
 poetry run flake8 src
 ```
 ![rfc_exp](assets/code_linting.png)
+
+Check your code annotation with mypy by using poetry:
+```
+poetry run mypy .
+```
+![rfc_exp](assets/mypy_run.png)

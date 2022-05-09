@@ -1,7 +1,9 @@
 import mlflow
+from typing import Any
 
-
-def create_mlflow_experiment_by_name(name: str) -> str:
+def create_mlflow_experiment_by_name(name: str) -> Any:
+    """Create mlflow experiment by specified name.
+    Returns experiment ID (existing or created)."""
     if str is None:
         raise Exception("Experiment name is empty!")
 
