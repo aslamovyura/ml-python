@@ -13,7 +13,8 @@ from .data import get_dataset
 from .pipeline import create_rfc_pipeline
 from .utils.mlflow_utils import create_mlflow_experiment_by_name
 
-EXPERIMENT_NAME = 'RandomForestClassifier'
+EXPERIMENT_NAME = "RandomForestClassifier"
+
 
 @click.command()
 @click.option(
@@ -31,46 +32,25 @@ EXPERIMENT_NAME = 'RandomForestClassifier'
     show_default=True,
 )
 @click.option(
-    "--random-state",
-    default=42,
-    type=int,
-    show_default=True,
+    "--random-state", default=42, type=int, show_default=True,
 )
 @click.option(
-    "--cv",
-    default=5,
-    type=int,
-    show_default=True,
+    "--cv", default=5, type=int, show_default=True,
 )
 @click.option(
-    "--use-scaler",
-    default=True,
-    type=bool,
-    show_default=True,
+    "--use-scaler", default=True, type=bool, show_default=True,
 )
 @click.option(
-    "--use-dim-reducer",
-    default=False,
-    type=bool,
-    show_default=True,
+    "--use-dim-reducer", default=False, type=bool, show_default=True,
 )
 @click.option(
-    "--n-estimators",
-    default=100,
-    type=int,
-    show_default=True,
+    "--n-estimators", default=100, type=int, show_default=True,
 )
 @click.option(
-    "--max-depth",
-    default=10,
-    type=int,
-    show_default=True,
+    "--max-depth", default=10, type=int, show_default=True,
 )
 @click.option(
-    "--criterion",
-    default='gini',
-    type=str,
-    show_default=True,
+    "--criterion", default="gini", type=str, show_default=True,
 )
 def train(
     dataset_path: Path,
@@ -81,7 +61,7 @@ def train(
     use_dim_reducer: bool,
     n_estimators: int,
     max_depth: int,
-    criterion: str
+    criterion: str,
 ) -> None:
     features, target = get_dataset(dataset_path)
 
@@ -94,15 +74,24 @@ def train(
 
     experiment_id = create_mlflow_experiment_by_name(EXPERIMENT_NAME)
     with mlflow.start_run(experiment_id=experiment_id):
-        pipeline = create_rfc_pipeline(use_scaler, use_dim_reducer, n_estimators, max_depth, criterion, random_state)
+        pipeline = create_rfc_pipeline(
+            use_scaler,
+            use_dim_reducer,
+            n_estimators,
+            max_depth,
+            criterion,
+            random_state,
+        )
 
-        scoring = ['accuracy', 'f1_macro', 'precision_macro', 'recall_macro']
-        scores = cross_validate(pipeline, features, target, scoring=scoring, cv=cv, return_train_score=True)
+        scoring = ["accuracy", "f1_macro", "precision_macro", "recall_macro"]
+        scores = cross_validate(
+            pipeline, features, target, scoring=scoring, cv=cv, return_train_score=True
+        )
 
-        accuracy = np.mean(scores['test_accuracy'])
-        precision = np.mean(scores['test_precision_macro'])
-        recall = np.mean(scores['test_recall_macro'])
-        f1 = np.mean(scores['test_f1_macro'])
+        accuracy = np.mean(scores["test_accuracy"])
+        precision = np.mean(scores["test_precision_macro"])
+        recall = np.mean(scores["test_recall_macro"])
+        f1 = np.mean(scores["test_f1_macro"])
 
         click.echo("---")
         click.echo(f"Accuracy: {accuracy}.")
@@ -111,8 +100,10 @@ def train(
         click.echo(f"F1-score: {f1}.")
         click.echo("---")
 
-        mlflow.log_param("scaler", 'StandardScaler()' if use_scaler else 'passthrough')
-        mlflow.log_param("dim_reducer", 'TruncatedSVD(10)' if use_dim_reducer else 'passthrough')
+        mlflow.log_param("scaler", "StandardScaler()" if use_scaler else "passthrough")
+        mlflow.log_param(
+            "dim_reducer", "TruncatedSVD(10)" if use_dim_reducer else "passthrough"
+        )
         mlflow.log_param("n_estimators", n_estimators)
         mlflow.log_param("max_depth", max_depth)
         mlflow.log_param("criterion", criterion)
@@ -120,7 +111,6 @@ def train(
 
         dump(pipeline, save_model_path)
         click.echo(f"Model is saved to {save_model_path}.")
-
 
 
 @click.command()
@@ -138,10 +128,7 @@ def train(
     type=click.Path(dir_okay=False, writable=True, path_type=Path),
     show_default=True,
 )
-def train_with_opt_hyperparameters(
-        dataset_path: Path,
-        save_model_path: Path
-) -> None:
+def train_with_opt_hyperparameters(dataset_path: Path, save_model_path: Path) -> None:
 
     features, target = get_dataset(dataset_path)
 
@@ -150,7 +137,7 @@ def train_with_opt_hyperparameters(
         "reduce_dim": ["passthrough", TruncatedSVD(10), TruncatedSVD(20)],
         "classifier__n_estimators": range(10, 126),
         "classifier__max_depth": range(5, 50),
-        "classifier__criterion": ['entropy', 'gini']
+        "classifier__criterion": ["entropy", "gini"],
     }
 
     experiment_id = create_mlflow_experiment_by_name(EXPERIMENT_NAME)
@@ -170,31 +157,40 @@ def train_with_opt_hyperparameters(
             outer_cv = KFold(n_splits=3, shuffle=True, random_state=i)
 
             # Non_nested parameter search and scoring
-            model = RandomizedSearchCV(pipe,
-                                       param_distributions=param_space,
-                                       # n_iter=20,
-                                       # n_iter=10,
-                                       n_iter=2,
-                                       scoring='accuracy',
-                                       cv=inner_cv,
-                                       n_jobs=-1)
+            model = RandomizedSearchCV(
+                pipe,
+                param_distributions=param_space,
+                # n_iter=20,
+                # n_iter=10,
+                n_iter=2,
+                scoring="accuracy",
+                cv=inner_cv,
+                n_jobs=-1,
+            )
             model.fit(features, target)
 
             # Nested CV with parameter optimization
             params = model.best_params_
             print(params)
 
-            scoring = ['accuracy', 'f1_macro', 'precision_macro', 'recall_macro']
+            scoring = ["accuracy", "f1_macro", "precision_macro", "recall_macro"]
             # pipeline = p.create_rfc_pipeline()
             # pipeline = create_rfc_pipeline()
 
-            scores = cross_validate(model, features, target, scoring=scoring, cv=outer_cv, return_train_score=True)
+            scores = cross_validate(
+                model,
+                features,
+                target,
+                scoring=scoring,
+                cv=outer_cv,
+                return_train_score=True,
+            )
 
-            accuracy = np.mean(scores['test_accuracy'])
+            accuracy = np.mean(scores["test_accuracy"])
             # print(accuracy)
-            precision = np.mean(scores['test_precision_macro'])
-            recall = np.mean(scores['test_recall_macro'])
-            f1 = np.mean(scores['test_f1_macro'])
+            precision = np.mean(scores["test_precision_macro"])
+            recall = np.mean(scores["test_recall_macro"])
+            f1 = np.mean(scores["test_f1_macro"])
 
             click.echo("---")
             click.echo(f"Accuracy: {accuracy}.")
@@ -203,11 +199,11 @@ def train_with_opt_hyperparameters(
             click.echo(f"F1-score: {f1}.")
             click.echo("---")
 
-            mlflow.log_param("scaler", params['scaler'])
-            mlflow.log_param("dim_reducer", params['reduce_dim'])
-            mlflow.log_param("n_estimators", params['classifier__n_estimators'])
-            mlflow.log_param("max_depth", params['classifier__max_depth'])
-            mlflow.log_param("criterion", params['classifier__criterion'])
+            mlflow.log_param("scaler", params["scaler"])
+            mlflow.log_param("dim_reducer", params["reduce_dim"])
+            mlflow.log_param("n_estimators", params["classifier__n_estimators"])
+            mlflow.log_param("max_depth", params["classifier__max_depth"])
+            mlflow.log_param("criterion", params["classifier__criterion"])
             mlflow.log_metric("accuracy", accuracy)
             mlflow.log_metric("precision", precision)
             mlflow.log_metric("recall", recall)
@@ -224,7 +220,6 @@ def train_with_opt_hyperparameters(
     click.echo(f"Model is saved to {save_model_path}.")
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     # train()
     train_with_opt_hyperparameters()

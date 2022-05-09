@@ -2,8 +2,6 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import TruncatedSVD, PCA
-from sklearn.manifold import TSNE
-from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
 
 
@@ -12,7 +10,7 @@ def create_logistic_pipeline(
     use_dim_reducer: bool = True,
     max_iter: int = 1000,
     logreg_C: float = 1.0,
-    random_state: int = 42
+    random_state: int = 42,
 ) -> Pipeline:
     pipeline_steps = []
     if use_scaler:
@@ -33,13 +31,12 @@ def create_logistic_pipeline(
 
 
 def create_rfc_pipeline(
-        use_scaler: bool = True,
-        use_dim_reducer: bool = True,
-        n_estimators: int = 100,
-        max_depth: int = 10,
-        criterion: str = 'gini',
-        random_state: int = None
-
+    use_scaler: bool = True,
+    use_dim_reducer: bool = True,
+    n_estimators: int = 100,
+    max_depth: int = 10,
+    criterion: str = "gini",
+    random_state: int = None,
 ) -> Pipeline:
     pipeline_steps = []
     if use_scaler:
@@ -51,10 +48,12 @@ def create_rfc_pipeline(
     pipeline_steps.append(
         (
             "classifier",
-            RandomForestClassifier(n_estimators=n_estimators,
-                                   criterion=criterion,
-                                   max_depth=max_depth,
-                                   random_state=random_state),
+            RandomForestClassifier(
+                n_estimators=n_estimators,
+                criterion=criterion,
+                max_depth=max_depth,
+                random_state=random_state,
+            ),
         )
     )
     return Pipeline(steps=pipeline_steps)

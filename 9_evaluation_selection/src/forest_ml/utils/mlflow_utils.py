@@ -10,5 +10,5 @@ def create_mlflow_experiment_by_name(name: str) -> str:
         return experiment.experiment_id
 
     experiment_id = mlflow.create_experiment(name)
-    print(f'created experiment ID: {experiment_id}')
+    print(f"created experiment ID: {experiment_id}")
     return experiment_id
