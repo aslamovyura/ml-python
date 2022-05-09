@@ -1,7 +1,7 @@
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import TruncatedSVD, PCA
+from sklearn.decomposition import TruncatedSVD
 from sklearn.ensemble import RandomForestClassifier
 
 

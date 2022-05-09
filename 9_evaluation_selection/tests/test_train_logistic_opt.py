@@ -1,6 +1,5 @@
 from click.testing import CliRunner
 import pytest
-import click
 
 from src.forest_ml.train_logistic import train_with_opt_hyperparameters
 
@@ -13,5 +12,5 @@ def runner() -> CliRunner:
 
 def test_error_for_invalid_dataset_path(runner: CliRunner) -> None:
     """It fails when test `dataset path` is empty."""
-    result = runner.invoke(train_with_opt_hyperparameters, ["-d", "",])
+    result = runner.invoke(train_with_opt_hyperparameters, ["-d", ""])
     assert result.exit_code == 2

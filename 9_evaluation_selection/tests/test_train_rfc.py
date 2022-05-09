@@ -1,6 +1,5 @@
 from click.testing import CliRunner
 import pytest
-import click
 
 from src.forest_ml.train_rfc import train
 
@@ -13,13 +12,13 @@ def runner() -> CliRunner:
 
 def test_error_for_invalid_dataset_path(runner: CliRunner) -> None:
     """It fails when test `dataset path` is empty."""
-    result = runner.invoke(train, ["-d", "",])
+    result = runner.invoke(train, ["-d", ""])
     assert result.exit_code == 2
 
 
 def test_error_for_invalid_save_model_path(runner: CliRunner) -> None:
     """It fails when test `save model path` is empty."""
-    result = runner.invoke(train, ["-d", "",])
+    result = runner.invoke(train, ["-d", ""])
     assert result.exit_code == 2
 
 

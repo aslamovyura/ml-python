@@ -32,22 +32,40 @@ EXPERIMENT_NAME = "LogisticRegression"
     show_default=True,
 )
 @click.option(
-    "--random-state", default=42, type=int, show_default=True,
+    "--random-state",
+    default=42,
+    type=int,
+    show_default=True,
 )
 @click.option(
-    "--cv", default=5, type=int, show_default=True,
+    "--cv",
+    default=5,
+    type=int,
+    show_default=True,
 )
 @click.option(
-    "--use-scaler", default=True, type=bool, show_default=True,
+    "--use-scaler",
+    default=True,
+    type=bool,
+    show_default=True,
 )
 @click.option(
-    "--use-dim-reducer", default=False, type=bool, show_default=True,
+    "--use-dim-reducer",
+    default=False,
+    type=bool,
+    show_default=True,
 )
 @click.option(
-    "--max-iter", default=1000, type=int, show_default=True,
+    "--max-iter",
+    default=1000,
+    type=int,
+    show_default=True,
 )
 @click.option(
-    "--logreg-c", default=1.0, type=float, show_default=True,
+    "--logreg-c",
+    default=1.0,
+    type=float,
+    show_default=True,
 )
 def train(
     dataset_path: Path,

@@ -32,25 +32,46 @@ EXPERIMENT_NAME = "RandomForestClassifier"
     show_default=True,
 )
 @click.option(
-    "--random-state", default=42, type=int, show_default=True,
+    "--random-state",
+    default=42,
+    type=int,
+    show_default=True,
 )
 @click.option(
-    "--cv", default=5, type=int, show_default=True,
+    "--cv",
+    default=5,
+    type=int,
+    show_default=True,
 )
 @click.option(
-    "--use-scaler", default=True, type=bool, show_default=True,
+    "--use-scaler",
+    default=True,
+    type=bool,
+    show_default=True,
 )
 @click.option(
-    "--use-dim-reducer", default=False, type=bool, show_default=True,
+    "--use-dim-reducer",
+    default=False,
+    type=bool,
+    show_default=True,
 )
 @click.option(
-    "--n-estimators", default=100, type=int, show_default=True,
+    "--n-estimators",
+    default=100,
+    type=int,
+    show_default=True,
 )
 @click.option(
-    "--max-depth", default=10, type=int, show_default=True,
+    "--max-depth",
+    default=10,
+    type=int,
+    show_default=True,
 )
 @click.option(
-    "--criterion", default="gini", type=str, show_default=True,
+    "--criterion",
+    default="gini",
+    type=str,
+    show_default=True,
 )
 def train(
     dataset_path: Path,

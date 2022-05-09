@@ -1,7 +1,6 @@
 import pandas as pd
 from pandasgui import show
 from pandas_profiling import ProfileReport
-import logging
 from pathlib import Path
 import click
 
@@ -44,7 +43,7 @@ def visualize_dataset(dataset_path: Path) -> None:
         raise Exception("Dataset path is empty!")
 
     dataset = pd.read_csv(dataset_path)
-    gui = show(dataset)
+    show(dataset)
 
 
 if __name__ == "__main__":
