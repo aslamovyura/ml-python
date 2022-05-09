@@ -65,3 +65,15 @@ Now you can use developer instruments, e.g. pytest:
 poetry run pytest
 ```
 ![rfc_exp](assets/tests_run.png)
+
+Format your code with black by using poetry:
+```
+poetry run black src tests
+```
+![rfc_exp](assets/black_formatting.png)
+
+Lint your code with flake8 by using poetry:
+```
+poetry run flake8 src
+```
+![rfc_exp](assets/code_linting.png)
