@@ -43,7 +43,7 @@ def create_rfc_pipeline(
         pipeline_steps.append(("scaler", StandardScaler()))
 
     if use_dim_reducer:
-        pipeline_steps.append(("reduce_dim", TruncatedSVD(n_components=10)))
+        pipeline_steps.append(("reduce_dim", TruncatedSVD(n_components=20)))
 
     pipeline_steps.append(
         (

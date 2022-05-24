@@ -25,3 +25,9 @@ def get_dataset(csv_path: Path) -> Tuple[pd.DataFrame, pd.Series]:
     features = dataset.drop("Cover_Type", axis=1)
     target = dataset["Cover_Type"]
     return features, target
+
+
+def get_test_features(csv_path: Path) -> pd.DataFrame:
+    features = pd.read_csv(csv_path)
+    click.echo(f"Dataset shape: {features.shape}.")
+    return features

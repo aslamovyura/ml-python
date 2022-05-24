@@ -11,6 +11,7 @@ train_logistic = "src.forest_ml.train_logistic:train"
 train_logistic_opt = "src.forest_ml.train_logistic:train_with_opt_hyperparameters"
 dataset_profiling = "src.forest_ml.utils.EDA:dataset_profiling"
 dataset_gui = "src.forest_ml.utils.EDA:visualize_dataset"
+train_and_test = "src.forest_ml.final_prediction:train_and_test"
 
 [tool.poetry.dependencies]
 python = "^3.8"
